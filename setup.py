@@ -22,6 +22,7 @@ setup(
   ],
   setup_requires = [
     "nose",
+    "responses",
   ],
   install_requires = [
     "requests",
