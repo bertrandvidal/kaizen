@@ -6,7 +6,7 @@ with open("README.md", "r") as readme_file:
 
 setup(
   name = "kaizen",
-  version = "0.1.0",
+  version = "0.1.1",
   description = "A python client and cli to manage your projects on AgileZen Kanban style.",
   long_description = readme,
   packages = ["kaizen"],
