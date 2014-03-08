@@ -14,6 +14,13 @@ If you want to install the package in development version from the source code:
 
     python setup.py develop
 
+Testing
+=======
+
+To test everything is in order you can run the following:
+
+    python setup.py nosetests
+
 References
 ==========
 
