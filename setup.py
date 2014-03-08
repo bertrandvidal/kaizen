@@ -12,6 +12,7 @@ setup(
   packages = ["kaizen"],
   author = "Bertrand Vidal",
   author_email = "vidal.bertrand@gmail.com",
+  url = "https://pypi.python.org/pypi/kaizen",
   classifiers = [
     "Environment :: Console",
     "Intended Audience :: Developers",
