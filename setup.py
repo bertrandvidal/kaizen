@@ -20,6 +20,9 @@ setup(
     "Operating System :: OS Independent",
     "Programming Language :: Python",
   ],
+  setup_requires = [
+    "nose",
+  ],
   install_requires = [
     "requests",
   ],

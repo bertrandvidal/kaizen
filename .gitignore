@@ -37,3 +37,6 @@ nosetests.xml
 
 # Virtualenv directory
 env/
+
+# Test result file from nosetest
+test_results.xml
