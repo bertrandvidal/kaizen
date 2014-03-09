@@ -7,13 +7,14 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md'), "r") as readme_f
 
 setup(
   name = "kaizen",
-  version = "0.1.1",
+  version = "0.1.2",
   description = "A python client and cli to manage your projects on AgileZen Kanban style.",
   long_description = readme,
   packages = ["kaizen"],
   author = "Bertrand Vidal",
   author_email = "vidal.bertrand@gmail.com",
-  url = "https://pypi.python.org/pypi/kaizen",
+  download_url = "https://pypi.python.org/pypi/kaizen",
+  url = "https://github.com/bertrandvidal/kaizen",
   classifiers = [
     "Environment :: Console",
     "Intended Audience :: Developers",
