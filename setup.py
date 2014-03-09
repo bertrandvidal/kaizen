@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+import os
 from setuptools import setup
 
-with open("README.md", "r") as readme_file:
+with open(os.path.join(os.path.dirname(__file__), 'README.md'), "r") as readme_file:
   readme = readme_file.read()
 
 setup(
