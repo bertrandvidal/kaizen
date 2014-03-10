@@ -1,3 +1,4 @@
+"""This module deals with HTTP related concerns regarding AgileZen API."""
 import logging
 import requests
 
@@ -15,7 +16,7 @@ class ApiClient(object):
     """
     self._api_key = api_key
 
-  def get(self, resource_path, headers={}):
+  def get(self, resource_path, headers=None):
     """Issue a HTTP GET request with the specified resource path and headers.
 
     Args:
@@ -25,13 +26,22 @@ class ApiClient(object):
       requests.HTTPError if we couldn't get the resource
     """
     url = self._get_url(resource_path)
-    headers = self._get_headers(headers)
+    headers = self._get_headers(headers or {})
     return self._get(url, headers)
 
   def _get(self, url, headers):
+    """Send a HTTP GET request to the specified url.
+
+    Args:
+      url: path to the resource to send the request to
+      headers: headers to be sent
+    Returns:
+      the object loaded from the json response
+    """
     response = requests.get(url, headers=headers)
     response.raise_for_status()
-    _LOG.debug("'GET' request issued to '%s' [%s s]", url, response.elapsed.total_seconds())
+    _LOG.debug("'GET' request issued to '%s' [%s s]", url,
+               response.elapsed.total_seconds())
     return response.json()
 
   def _get_url(self, resource_path):
