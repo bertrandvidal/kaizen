@@ -6,6 +6,7 @@ _LOG = logging.getLogger(__name__)
 # requests logs a line every time a new connection is established
 logging.getLogger("requests").setLevel(logging.ERROR)
 
+
 class ApiClient(object):
   """Ease making calls to AgileZen API."""
 
@@ -16,31 +17,27 @@ class ApiClient(object):
     """
     self._api_key = api_key
 
-  def get(self, resource_path, headers=None):
-    """Issue a HTTP GET request with the specified resource path and headers.
+  def make_request(self, verb, url, params=None, data=None, headers=None):
+    """Send a HTTP request to the given url along with params, data and headers.
 
     Args:
-      resource_path: path to the resource which will receive the request
-      headers: additional headers
-    Raises:
-      requests.HTTPError if we couldn't get the resource
-    """
-    url = self._get_url(resource_path)
-    headers = self._get_headers(headers or {})
-    return self._get(url, headers)
-
-  def _get(self, url, headers):
-    """Send a HTTP GET request to the specified url.
-
-    Args:
+      verb: HTTP verb to use
       url: path to the resource to send the request to
-      headers: headers to be sent
+      params: url parameters to send
+      data: paylaod to send
+      headers: headers to send
     Returns:
-      the object loaded from the json response
+      the dict loaded from the json response
+    Raises:
+      a requests.HTTPError if the status code is not OK
     """
-    response = requests.get(url, headers=headers)
+    default_dict = lambda x: x if x else {}
+    url = self._get_url(url)
+    response = requests.request(verb, url, params=default_dict(params),
+                                data=default_dict(data),
+                                headers=default_dict(headers))
     response.raise_for_status()
-    _LOG.debug("'GET' request issued to '%s' [%s s]", url,
+    _LOG.debug("request issued to '%s' [%s s]", url,
                response.elapsed.total_seconds())
     return response.json()
 
@@ -64,3 +61,4 @@ class ApiClient(object):
       "X-Zen-ApiKey": self._api_key
     })
     return headers
+
