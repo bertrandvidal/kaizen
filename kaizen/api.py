@@ -32,6 +32,16 @@ class ZenRequest(Request):
     return self._client.make_request(self.verb, self.url, self.params,
                                      self.data)
 
+  def with_enrichments(self, *enrichments):
+    """Adds enrichment to the resource(s) this request will return.
+
+    Args:
+      enrichments: one or more enrichments to add to the current resource(s).
+      Refer to the AgileZen API documentation to know available enrichments on
+      each resource.
+    """
+    return self.update_params({"with": ",".join(enrichments)})
+
   def projects(self, project_id=None):
     """Access the Project resource. If project_id is None the request will list
     the Project you have access to.
