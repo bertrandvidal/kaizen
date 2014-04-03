@@ -40,3 +40,6 @@ env/
 
 # Test result file from nosetest
 test_results.xml
+
+# Vim save files
+*.swp
