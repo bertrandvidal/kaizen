@@ -2,6 +2,11 @@ from kaizen.client import ApiClient
 from kaizen.request import Request
 
 
+class ChainingError(Exception):
+  """Used when a request is incorrectly chained."""
+  pass
+
+
 def _default(arg):
   """Return the empty string if the arg is None"""
   return arg if arg is not None else ""
@@ -66,10 +71,22 @@ class ZenRequest(Request):
 
   def projects(self, project_id=None):
     """Access the Project resource. If project_id is None the request will list
-    the Project you have access to.
+    the Projects you have access to.
 
     Args:
       project_id: id of a specific Project, defaults to None
     """
     return self.update_url("/projects/%s" % _default(project_id))
+
+  def phases(self, phase_id=None):
+    """Access the Phases resource as a sub-resource of a Project. If phase_id
+    is None the request will list all Phases you have access to in a given
+    Project.
+
+    Args:
+      phase_id: id of a specific Phase, defaults to None
+    """
+    if "projects" not in self.url:
+      raise ChainingError("You should call 'projects' before 'phases'.")
+    return self.update_url("/phases/%s" % _default(phase_id))
 
