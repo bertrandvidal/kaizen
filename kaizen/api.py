@@ -25,9 +25,9 @@ class ZenRequest(Request):
     """Send the request to the API.
 
     Returns:
-      - the JSON dict response from AgileZen
+      the JSON dict response from AgileZen
     Raises:
-      - requests.exceptions.HTTPError if the request is not successful
+      requests.exceptions.HTTPError if the request is not successful
     """
     return self._client.make_request(self.verb, self.url, self.params,
                                      self.data)
@@ -37,6 +37,8 @@ class ZenRequest(Request):
     Args:
       page: the index of the page to return
       size: the number of entities on each page
+    Note:
+      see http://dev.agilezen.com/concepts/pagination.html
     """
     return self.update_params({"page": page, "pageSize": size})
 
@@ -45,6 +47,8 @@ class ZenRequest(Request):
 
     Args:
       filters: string to be used as a filter
+    Note:
+      see http://dev.agilezen.com/concepts/filters.html
     """
     return self.update_params({"where": filters})
 
@@ -55,6 +59,8 @@ class ZenRequest(Request):
       enrichments: one or more enrichments to add to the current resource(s).
       Refer to the AgileZen API documentation to know available enrichments on
       each resource.
+    Note:
+      see http://dev.agilezen.com/concepts/enrichments.html
     """
     return self.update_params({"with": ",".join(enrichments)})
 
