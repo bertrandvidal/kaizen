@@ -1,10 +1,10 @@
 from kaizen.client import ApiClient
-from kaizen.request import Verbs, Request
+from kaizen.request import Request
 
 
 def _default(arg):
   """Return the empty string if the arg is None"""
-  return (arg if arg is not None else "")
+  return arg if arg is not None else ""
 
 
 class ZenRequest(Request):
