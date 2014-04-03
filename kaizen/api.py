@@ -31,6 +31,14 @@ class ZenRequest(Request):
     """
     return self._client.make_request(self.verb, self.url, self.params,
                                      self.data)
+  def paginate(self, page, size):
+    """Paginate results from the api.
+
+    Args:
+      page: the index of the page to return
+      size: the number of entities on each page
+    """
+    return self.update_params({"page": page, "pageSize": size})
 
   def with_enrichments(self, *enrichments):
     """Adds enrichment to the resource(s) this request will return.
