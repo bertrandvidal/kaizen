@@ -40,6 +40,14 @@ class ZenRequest(Request):
     """
     return self.update_params({"page": page, "pageSize": size})
 
+  def where(self, filters):
+    """Make it possible to filter resource(s) this request will return.
+
+    Args:
+      filters: string to be used as a filter
+    """
+    return self.update_params({"where": filters})
+
   def with_enrichments(self, *enrichments):
     """Adds enrichment to the resource(s) this request will return.
 
