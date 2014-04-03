@@ -31,7 +31,7 @@ class ZenRequest(Request):
     """
     return self._client.make_request(self.verb, self.url, self.params,
                                      self.data)
-  def paginate(self, page, size):
+  def paginate(self, page, size=100):
     """Paginate results from the api.
 
     Args:
