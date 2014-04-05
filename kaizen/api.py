@@ -62,9 +62,9 @@ class ZenRequest(Request):
         """Adds enrichment to the resource(s) this request will return.
 
         Args:
-            enrichments: one or more enrichments to add to the current resource(s).
-            Refer to the AgileZen API documentation to know available enrichments
-            on each resource.
+            enrichments: one or more enrichments to add to the current
+            resource(s). Refer to the AgileZen API documentation to know
+            available enrichments on each resource.
         Note:
             see http://dev.agilezen.com/concepts/enrichments.html
         """
@@ -97,8 +97,8 @@ class ZenRequest(Request):
         Args:
             name: the name of the Phase as displayed on the board
             description: the description of the Phase
-            index: zero based index into the list of phases, defaults to the index
-            before the Backlog
+            index: zero based index into the list of phases, defaults to the
+            index before the Backlog
             limit: work in progress limit for phase
         """
         self.update_verb(Verbs.POST)
