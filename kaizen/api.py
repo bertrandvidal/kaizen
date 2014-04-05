@@ -1,5 +1,5 @@
 from kaizen.client import ApiClient
-from kaizen.request import Request
+from kaizen.request import Verbs, Request
 
 
 class ChainingError(Exception):
@@ -89,4 +89,23 @@ class ZenRequest(Request):
     if "projects" not in self.url:
       raise ChainingError("You should call 'projects' before 'phases'.")
     return self.update_url("/phases/%s" % _default(phase_id))
+
+  def add_phase(self, name, description, index=None, limit=None):
+    """Add a new Phase to a Project.
+
+    Args:
+      name: the name of the Phase as displayed on the board
+      description: the description of the Phase
+      index: zero based index into the list of phases, defaults to the index
+      before the Backlog
+      limit: work in progress limit for phase
+    """
+    self.update_verb(Verbs.POST)
+    phase_data = {"name": name, "description": description}
+    if index is not None:
+      phase_data.update({"index": index})
+    if limit is not None:
+      phase_data.update({"limit": limit})
+    self.update_data(phase_data)
+    return self.phases()
 
