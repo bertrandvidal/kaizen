@@ -1,4 +1,5 @@
 """This module deals with HTTP related concerns regarding AgileZen API."""
+import json
 import logging
 import requests
 
@@ -34,9 +35,9 @@ class ApiClient(object):
     default_dict = lambda x: x if x else {}
     url = self._get_url(url)
     headers = default_dict(headers)
+    data = json.dumps(default_dict(data))
     response = requests.request(verb, url, params=default_dict(params),
-                                data=default_dict(data),
-                                headers=self._get_headers(headers))
+                                data=data, headers=self._get_headers(headers))
     response.raise_for_status()
     _LOG.debug("request issued to '%s' [%s s]", url,
                response.elapsed.total_seconds())
