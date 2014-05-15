@@ -1,6 +1,6 @@
 """Holds the logic to  create HTTP requests.
 
-For now we consider HTTP requests as having for components i.e.
+For now we consider HTTP requests as having four components i.e.
  - URL
  - verb
  - params
