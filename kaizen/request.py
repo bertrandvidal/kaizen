@@ -20,6 +20,8 @@ class Verbs(object):
         for verb in [self.GET, self.POST, self.PUT, self.DELETE]:
             yield verb
 
+VERBS = Verbs()
+
 
 class Request(object):
     """Represent a HTTP request with a URL, a verb, params and data.
@@ -41,7 +43,7 @@ class Request(object):
     def __init__(self):
         """Initialize each components of the HTTP requests to its default value."""
         self._url = ""
-        self._verb = Verbs.GET
+        self._verb = VERBS.GET
         self._params = {}
         self._data = {}
 
@@ -68,7 +70,7 @@ class Request(object):
     @verb.setter
     def verb(self, verb):
         """Enforce that the verb is known, raises a ValueError otherwise."""
-        if verb not in Verbs():
+        if verb not in VERBS:
             raise ValueError("Unkown HTTP verb '%s'" % verb)
         self._verb = verb
 

@@ -1,23 +1,20 @@
 import unittest
 
-from kaizen.request import Verbs, Request
+from kaizen.request import VERBS, Request
 
 
 class VerbsTest(unittest.TestCase):
 
-    def setUp(self):
-        self._verbs = Verbs()
-
     def testIn(self):
-        self.assertIn("GET", self._verbs)
-        self.assertIn("POST", self._verbs)
-        self.assertIn("PUT", self._verbs)
-        self.assertIn("DELETE", self._verbs)
+        self.assertIn("GET", VERBS)
+        self.assertIn("POST", VERBS)
+        self.assertIn("PUT", VERBS)
+        self.assertIn("DELETE", VERBS)
 
     def testNotIn(self):
-        self.assertNotIn("NoWay", self._verbs)
-        self.assertNotIn("OPTIONS", self._verbs)
-        self.assertNotIn("HEAD", self._verbs)
+        self.assertNotIn("NoWay", VERBS)
+        self.assertNotIn("OPTIONS", VERBS)
+        self.assertNotIn("HEAD", VERBS)
 
 
 class RequestTest(unittest.TestCase):
@@ -30,6 +27,7 @@ class RequestTest(unittest.TestCase):
             """To make it possible to use assertRaises."""
             self._request.verb = new_verb
         self.assertRaises(ValueError, assign_verb, "Nop!")
+        self.assertRaises(ValueError, self._request.update_verb, "Nop!")
 
     def testCallChaining(self):
         post_request = self._request.update_verb("POST").update_url("/call_me")\
