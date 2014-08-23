@@ -60,9 +60,9 @@ class ApiClient(object):
             headers: headers provided by the user
         """
         headers.update({
-          "Accept": "application/json",
-          "Content-type": "application/json",
-          "X-Zen-ApiKey": self._api_key
+            "Accept": "application/json",
+            "Content-type": "application/json",
+            "X-Zen-ApiKey": self._api_key
         })
         return headers
 

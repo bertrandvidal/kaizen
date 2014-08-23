@@ -31,17 +31,17 @@ class Request(object):
     Methods to update the request's components are chainable.
 
     Example:
-    Code  req= |  top_resource(12)   | .update_sub_resource(42) | .name("popo")
-    URL   "/"  |  "/top_resource/12" |   +="/sub_resource/42"   |  +="/"
-    VERB  "GET"|  "GET"              |   "PUT"                  |  "PUT"
-    PARAMS {}  |  {}                 |   {}                     |  {}
-    DATA   {}  |  {}                 |   {}                     |  {"name":"popo"}
+    Code  req= | top_resource(12)  | .update_sub_resource(42)| .name("popo")
+    URL   "/"  | "/top_resource/12"|   +="/sub_resource/42"  |  +="/"
+    VERB  "GET"| "GET"             |   "PUT"                 |  "PUT"
+    PARAMS {}  | {}                |   {}                    |  {}
+    DATA   {}  | {}                |   {}                    |  {"name":"popo"}
 
     req.execute() # or something equivalent
     """
 
     def __init__(self):
-        """Initialize each components of the HTTP requests to its default value."""
+        """Initialize components of the HTTP requests to its default value."""
         self._url = ""
         self._verb = VERBS.GET
         self._params = {}
