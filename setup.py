@@ -7,7 +7,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.rst'), "r") as readme_
 
 setup(
     name = "kaizen",
-    version = "0.1.1",
+    version = "0.1.3",
     description = "A python client and cli to manage your projects on AgileZen Kanban style.",
     long_description = readme,
     packages = ["kaizen"],
