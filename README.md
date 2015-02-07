@@ -1,7 +1,7 @@
 kaizen
 ======
 
-[![PyPI latest version badge][pypi_version]][pypi_link] [![PyPI monthly downloads][pypi_downloads]][pypi_link] [![Code health][landscape]][landscape_link]
+[![PyPI latest version badge][pypi_version]][pypi_link] [![Code health][landscape]][landscape_link]
 
 
 A python client and cli to manage your projects on AgileZen Kanban style.
@@ -30,7 +30,6 @@ References
   - http://dev.agilezen.com/
 
 [pypi_link]: https://pypi.python.org/pypi/kaizen "kaizen on PyPI"
-[pypi_version]: https://pypip.in/v/kaizen/badge.png "PyPI latest version"
-[pypi_downloads]: https://pypip.in/d/kaizen/badge.png "PyPI monthly downloads"
+[pypi_version]: https://badge.fury.io/py/kaizen.svg "PyPI latest version"
 [landscape_link]: https://landscape.io/github/bertrandvidal/kaizen/master "kaizen on Landscape"
 [landscape]: https://landscape.io/github/bertrandvidal/kaizen/master/landscape.png "Code health"
