@@ -1,4 +1,6 @@
 import unittest
+import json
+import responses
 
 from kaizen.api import ZenRequest, ChainingError
 
@@ -21,9 +23,20 @@ class ZenRequestTest(unittest.TestCase):
         request = ZenRequest("fake_key").with_enrichments("metrics", "members")
         self.assertEqual(request.params, {"with": "metrics,members"})
 
+    @responses.activate
     def test_phase_list_url(self):
+        phase_data = {
+            "id": 12,
+            "name": "Phase",
+            "description": "Contains stories",
+            "index": 2
+        }
+        phase_url = "https://agilezen.com/api/v1/projects/12/phases/12"
         request = ZenRequest("fake_key").projects(12).phases(12)
-        self.assertIn("phases/12", request.url)
+        responses.add(responses.GET, phase_url, status=200,
+                      content_type='application/json',
+                      body=json.dumps(phase_data))
+        request.send()
 
 
 if __name__ == "__main__":
