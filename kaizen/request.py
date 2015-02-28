@@ -7,6 +7,7 @@ For now we consider HTTP requests as having four components i.e.
  - data
 """
 
+
 class Verbs(object):
     """Represent the most common HTTP verbs."""
 
