@@ -53,6 +53,19 @@ class ZenRequestTest(unittest.TestCase):
                       body=json.dumps(phase_data))
         request.send()
 
+    def test_members_raises_chaining_error(self):
+        request = ZenRequest("fake_key")
+        self.assertRaises(ChainingError, request.members)
+
+    @responses.activate
+    def test_members_url(self):
+        request = ZenRequest("fake_key").projects(12).members(12)
+        members_url = "https://agilezen.com/api/v1/projects/12/members/12"
+        responses.add(responses.GET, members_url, status=200,
+                      content_type="application/json", body="{}")
+        request.send()
+
+
 
 if __name__ == "__main__":
     unittest.main()

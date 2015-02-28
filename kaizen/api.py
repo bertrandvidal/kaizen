@@ -110,3 +110,18 @@ class ZenRequest(Request):
         self.update_data(phase_data)
         return self.phases()
 
+    def members(self, user_id=None):
+        """Return member(s) within a project.
+        If user_id is None it will list members.
+
+        Args:
+            user_id: the id of the user you want details from
+
+        Raises:
+            ChainingError: if the request has not been linked to a project
+            calling the 'projects' method.
+        """
+        if "projects" not in self.url:
+            raise ChainingError("You should call 'projects' before 'members'.")
+        return self.update_url("/members/%s" % _default(user_id))
+
