@@ -11,6 +11,11 @@ class ApiClientTest(unittest.TestCase):
     def setUp(self):
         self._client = ApiClient("fake_api_key")
 
+    def test_get_url(self):
+        full_url = "https://agilezen.com/api/v1/fake_url"
+        self.assertEqual(full_url, self._client._get_url("/fake_url"))
+        self.assertEqual(full_url, self._client._get_url("fake_url"))
+
     @responses.activate
     def test_issue_request(self):
         items = {"items": [1, 2]}
