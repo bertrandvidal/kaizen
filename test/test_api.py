@@ -66,6 +66,5 @@ class ZenRequestTest(unittest.TestCase):
         request.send()
 
 
-
 if __name__ == "__main__":
     unittest.main()
