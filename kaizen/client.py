@@ -16,7 +16,7 @@ def default_dict(obj):
 class ApiClient(object):
     """Ease making calls to AgileZen API."""
 
-    _API_URL = "https://agilezen.com/api/v1/"
+    API_URL = "https://agilezen.com/api/v1/"
 
     def __init__(self, api_key):
         """
@@ -57,7 +57,7 @@ class ApiClient(object):
         Args:
             resource_path: path to the resource from the API root
         """
-        return "%s%s" % (self.__class__._API_URL, resource_path)
+        return "%s%s" % (self.__class__.API_URL, resource_path)
 
     def _get_headers(self, headers):
         """Return the given headers update with headers required by the API.
