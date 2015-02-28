@@ -16,8 +16,8 @@ class ApiClientTest(unittest.TestCase):
         items = {"items": [1, 2]}
         params = {"k": "v"}
         responses.add(responses.GET, "https://agilezen.com/api/v1/fake_url?k=v",
-                      match_querystring=True, body=json.dumps(items), status=200,
-                      content_type="application/json")
+                      match_querystring=True, body=json.dumps(items),
+                      status=200, content_type="application/json")
         self.assertEquals(self._client.make_request("GET", "fake_url", params),
                           items)
 
