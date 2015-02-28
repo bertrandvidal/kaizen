@@ -15,11 +15,15 @@ class ZenRequestTest(unittest.TestCase):
 
     def test_where(self):
         params = ZenRequest("fake_key").where("color:green").params
-        self.assertEquals(params, {"where": "color:green"})
+        self.assertEqual(params, {"where": "color:green"})
 
     def test_with_enrichments(self):
         request = ZenRequest("fake_key").with_enrichments("metrics", "members")
-        self.assertEquals(request.params, {"with": "metrics,members"})
+        self.assertEqual(request.params, {"with": "metrics,members"})
+
+    def test_phase_list_url(self):
+        request = ZenRequest("fake_key").projects(12).phases(12)
+        self.assertIn("phases/12", request.url)
 
 
 if __name__ == "__main__":
