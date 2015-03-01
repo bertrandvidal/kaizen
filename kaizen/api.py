@@ -2,11 +2,6 @@ from kaizen.client import ApiClient
 from kaizen.request import Verbs, Request
 
 
-class ChainingError(Exception):
-    """Used when a request is incorrectly chained."""
-    pass
-
-
 def _default(arg):
     """Return the empty string if the arg is None"""
     return arg if arg is not None else ""
@@ -108,8 +103,6 @@ class ProjectRequest(ApiRequest):
         Args:
             phase_id: id of a specific Phase, defaults to None
         """
-        if "projects" not in self.url:
-            raise ChainingError("You should call 'projects' before 'phases'.")
         return self.update_url("/phases/%s" % _default(phase_id))
 
     def add_phase(self, name, description, index=None, limit=None):
@@ -137,12 +130,6 @@ class ProjectRequest(ApiRequest):
 
         Args:
             user_id: the id of the user you want details from
-
-        Raises:
-            ChainingError: if the request has not been linked to a project
-            calling the 'projects' method.
         """
-        if "projects" not in self.url:
-            raise ChainingError("You should call 'projects' before 'members'.")
         return self.update_url("/members/%s" % _default(user_id))
 
