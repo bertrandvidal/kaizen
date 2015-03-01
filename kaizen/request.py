@@ -9,7 +9,7 @@ For now we consider HTTP requests as having four components i.e.
 
 
 class Verbs(object):
-    """Represent the most common HTTP verbs."""
+    """Represent the most commonly used HTTP verbs in AgileZen's API."""
 
     GET = "GET"
     POST = "POST"
