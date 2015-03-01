@@ -159,6 +159,19 @@ class PhaseRequest(ApiRequest):
         return request.update_url("/phases/%s" %
                                   _default_to_empty_str(phase_id))
 
+    def update(self, name, description, index=None, limit=None):
+        """Update information of an existing phase.
+
+        Args:
+            name: the name of the Phase as displayed on the board
+            description: the description of the Phase
+            index: zero based index into the list of phases. Backlog phase
+            must have index 0 and Archive must have the last index.
+            limit: work in progress limit for phase
+        """
+        # Update is just like add except it uses PUT
+        return self.add(name, description, index, limit).update_verb(VERBS.PUT)
+
     def add(self, name, description, index=None, limit=None):
         """Add a new Phase to a Project.
 
