@@ -85,15 +85,11 @@ class ZenRequest(ApiRequest):
 class ProjectRequest(ApiRequest):
     """Access the Project resource."""
 
-    def __init__(self, api_key, project_id=None):
-        ApiRequest.__init__(self, api_key)
-        self.update_url("/projects/%s" % _default(project_id))
-
     @classmethod
     def from_zen_request(cls, zen_request, project_id=None):
-        # FIXME: All request attribute - url, verb, ... - are lost they
-        # should be transmitted to the 'child' request
-        return cls(zen_request.get_api_key(), project_id)
+        request = cls(zen_request.get_api_key())
+        request = zen_request.copy(request)
+        return request.update_url("/projects/%s" % _default(project_id))
 
     def phases(self, phase_id=None):
         """Access the Phases resource as a sub-resource of a Project.

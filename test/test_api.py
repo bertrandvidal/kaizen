@@ -3,6 +3,7 @@ import json
 import responses
 
 from kaizen.api import ApiRequest, ProjectRequest, ZenRequest
+from kaizen.request import VERBS
 
 
 class ApiRequestTest(unittest.TestCase):
@@ -58,7 +59,7 @@ class ProjectRequestTest(unittest.TestCase):
             "index": 2
         }
         phase_url = "https://agilezen.com/api/v1/projects/12/phases/12"
-        request = ProjectRequest("fake_key", 12).phases(12)
+        request = ZenRequest("fake_key").projects(12).phases(12)
         responses.add(responses.GET, phase_url, status=200,
                       content_type='application/json',
                       body=json.dumps(phase_data))
@@ -66,17 +67,24 @@ class ProjectRequestTest(unittest.TestCase):
 
     @responses.activate
     def test_members_url(self):
-        request = ProjectRequest("fake_key", 12).members(12)
+        request = ZenRequest("fake_key").projects(12).members(12)
         members_url = "https://agilezen.com/api/v1/projects/12/members/12"
         responses.add(responses.GET, members_url, status=200,
                       content_type="application/json", body="{}")
         request.send()
 
     def test_from_zen_request(self):
-        zen_request = ZenRequest("fake_key")
+        zen_request = ZenRequest("fake_key").update_url("/fake_url")\
+                                            .update_params({"k": "v"})\
+                                            .update_verb(VERBS.POST)\
+                                            .update_data({"x": "y"})
         project_request = ProjectRequest.from_zen_request(zen_request)
         self.assertEqual(project_request.get_api_key(),
                          zen_request.get_api_key())
+        self.assertEqual(project_request.url, "/fake_url/projects/")
+        self.assertEqual(project_request.verb, VERBS.POST)
+        self.assertEqual(project_request.params, {"k": "v"})
+        self.assertEqual(project_request.data, {"x": "y"})
 
 
 if __name__ == "__main__":
