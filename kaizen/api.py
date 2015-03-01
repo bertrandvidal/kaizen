@@ -17,6 +17,7 @@ class ApiRequest(Request):
 
     def __init__(self, api_key):
         Request.__init__(self)
+        self._api_key = api_key
         self._client = ApiClient(api_key)
 
     # TODO(bvidal): the method send could cache the result from the API
@@ -31,6 +32,9 @@ class ApiRequest(Request):
             requests.exceptions.HTTPError if the request is not successful
         """
         return self._client.send_request(self)
+
+    def get_api_key(self):
+        return self._api_key
 
     def paginate(self, page, size=100):
         """Paginate results from the api.
@@ -80,7 +84,21 @@ class ZenRequest(ApiRequest):
         Args:
             project_id: id of a specific Project, defaults to None
         """
-        return self.update_url("/projects/%s" % _default(project_id))
+        return ProjectRequest.from_zen_request(self, project_id)
+
+
+class ProjectRequest(ApiRequest):
+    """Access the Project resource."""
+
+    def __init__(self, api_key, project_id=None):
+        ApiRequest.__init__(self, api_key)
+        self.update_url("/projects/%s" % _default(project_id))
+
+    @classmethod
+    def from_zen_request(cls, zen_request, project_id=None):
+        # FIXME: All request attribute - url, verb, ... - are lost they
+        # should be transmitted to the 'child' request
+        return cls(zen_request.get_api_key(), project_id)
 
     def phases(self, phase_id=None):
         """Access the Phases resource as a sub-resource of a Project.
