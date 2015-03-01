@@ -2,7 +2,7 @@ import unittest
 import json
 import responses
 
-from kaizen.api import ApiRequest, ProjectRequest, ZenRequest
+from kaizen.api import ApiRequest, ProjectRequest, ZenRequest, PhaseRequest
 from kaizen.request import VERBS
 
 
@@ -98,6 +98,31 @@ class ProjectRequestTest(unittest.TestCase):
                       content_type="application/json", status=200,
                       body=json.dumps(body))
         project.send()
+
+
+class PhaseRequestTest(unittest.TestCase):
+
+    def test_from_project_request(self):
+        zen_request = ZenRequest("fake_key").update_url("/fake_url")\
+                                            .update_params({"k": "v"})\
+                                            .update_verb(VERBS.POST)\
+                                            .update_data({"x": "y"})
+        project_request = ProjectRequest.from_zen_request(zen_request, 12)
+        phase_request = PhaseRequest.from_project_request(project_request)
+        self.assertEqual(phase_request.get_api_key(),
+                         zen_request.get_api_key())
+        self.assertEqual(phase_request.url, "/fake_url/projects/12/phases/")
+        self.assertEqual(phase_request.verb, VERBS.POST)
+        self.assertEqual(phase_request.params, {"k": "v"})
+        self.assertEqual(phase_request.data, {"x": "y"})
+
+    @responses.activate
+    def test_list_phase(self):
+        phase_request = ZenRequest("fake_key").projects(12).phases()
+        responses.add(responses.GET,
+                      "https://agilezen.com/api/v1/projects/12/phases/",
+                      content_type="application/json", status=200, body="{}")
+        phase_request.send()
 
 
 if __name__ == "__main__":

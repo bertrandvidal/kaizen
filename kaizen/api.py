@@ -87,6 +87,13 @@ class ProjectRequest(ApiRequest):
 
     @classmethod
     def from_zen_request(cls, zen_request, project_id=None):
+        """Creates a ProjectRequest with all the attributes of the ZenRequest.
+
+        Args:
+            zen_request: ZenRequest used to get the ProjectRequest attributes
+            project_id: id of the Project to work on or None to get access
+            to the list of Projects
+        """
         request = cls(zen_request.get_api_key())
         request = zen_request.copy(request)
         return request.update_url("/projects/%s" %
@@ -115,14 +122,14 @@ class ProjectRequest(ApiRequest):
         return self.update_verb(VERBS.PUT)
 
     def phases(self, phase_id=None):
-        """Access the Phases resource as a sub-resource of a Project.
+        """Access the Phases resource as a sub-request of a Project.
         If phase_id is None the request will list all Phases you have access
         to in a given Project.
 
         Args:
             phase_id: id of a specific Phase, defaults to None
         """
-        return self.update_url("/phases/%s" % _default_to_empty_str(phase_id))
+        return PhaseRequest.from_project_request(self, phase_id)
 
     def add_phase(self, name, description, index=None, limit=None):
         """Add a new Phase to a Project.
@@ -151,4 +158,23 @@ class ProjectRequest(ApiRequest):
             user_id: the id of the user you want details from
         """
         return self.update_url("/members/%s" % _default_to_empty_str(user_id))
+
+
+class PhaseRequest(ApiRequest):
+    """Give access to the Phase entry point."""
+
+    @classmethod
+    def from_project_request(cls, project_request, phase_id=None):
+        """Create a PhaseRequest as a sub-resource of a ProjectRequest
+
+        Args:
+            project_request: the ProjectRequest to which the PhaseRequest will
+            be linked
+            phase_id: the id of the phase we want to access, or None to be able
+            to list the Phases of the Project
+        """
+        request = cls(project_request.get_api_key())
+        request = project_request.copy(request)
+        return request.update_url("/phases/%s" %
+                                  _default_to_empty_str(phase_id))
 
