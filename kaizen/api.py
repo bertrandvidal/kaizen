@@ -12,20 +12,16 @@ def _default(arg):
     return arg if arg is not None else ""
 
 
-class ZenRequest(Request):
-    """The main object to use to retrieve resources from the AgileZen API.
-
-    Getting information on one of your projects is as simply as:
-    ZenRequest(api_key).projects(project_id).send()
-    """
-    # TODO(bvidal): the method send could cache the result from the API
-    # and invalid it if any other method is called. Not sure it's useful
-    # though... So I don't need it for now.
+class ApiRequest(Request):
+    """The base Request object containing common methods."""
 
     def __init__(self, api_key):
         Request.__init__(self)
         self._client = ApiClient(api_key)
 
+    # TODO(bvidal): the method send could cache the result from the API
+    # and invalid it if any other method is called. Not sure it's useful
+    # though... So I don't need it for now.
     def send(self):
         """Send the request to the API.
 
@@ -68,6 +64,14 @@ class ZenRequest(Request):
             see http://dev.agilezen.com/concepts/enrichments.html
         """
         return self.update_params({"with": ",".join(enrichments)})
+
+
+class ZenRequest(ApiRequest):
+    """Entry point to access AgileZen's API resources.
+
+    Getting information on one of your projects is as simple as:
+    ZenRequest(api_key).projects(project_id).send()
+    """
 
     def projects(self, project_id=None):
         """Access the Project resource. If project_id is None the request will

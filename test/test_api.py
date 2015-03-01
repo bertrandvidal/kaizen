@@ -2,18 +2,14 @@ import unittest
 import json
 import responses
 
-from kaizen.api import ZenRequest, ChainingError
+from kaizen.api import ApiRequest, ZenRequest, ChainingError
 
 
-class ZenRequestTest(unittest.TestCase):
-
-    def test_chaining_project_phase(self):
-        request = ZenRequest("fake_key")
-        self.assertRaises(ChainingError, request.phases)
+class ApiRequestTest(unittest.TestCase):
 
     @responses.activate
     def test_paginate(self):
-        request = ZenRequest("fake_key").paginate(2, 12)
+        request = ApiRequest("fake_key").paginate(2, 12)
         responses.add(responses.GET,
                       "https://agilezen.com/api/v1/?page=2&pageSize=12",
                       content_type="application/json", body="{}", status=200,
@@ -22,7 +18,7 @@ class ZenRequestTest(unittest.TestCase):
 
     @responses.activate
     def test_where(self):
-        request = ZenRequest("fake_key").where("color:green")
+        request = ApiRequest("fake_key").where("color:green")
         responses.add(responses.GET,
                       "https://agilezen.com/api/v1/?where=color:green",
                       content_type="application/json", body="{}", status=200,
@@ -31,12 +27,19 @@ class ZenRequestTest(unittest.TestCase):
 
     @responses.activate
     def test_with_enrichments(self):
-        request = ZenRequest("fake_key").with_enrichments("metrics", "members")
+        request = ApiRequest("fake_key").with_enrichments("metrics", "members")
         responses.add(responses.GET,
                       "https://agilezen.com/api/v1/?with=metrics,members",
                       content_type="application/json", body="{}", status=200,
                       match_querystring=True)
         request.send()
+
+
+class ZenRequestTest(unittest.TestCase):
+
+    def test_chaining_project_phase(self):
+        request = ZenRequest("fake_key")
+        self.assertRaises(ChainingError, request.phases)
 
     @responses.activate
     def test_phase_list_url(self):
