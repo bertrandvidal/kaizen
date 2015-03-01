@@ -20,8 +20,7 @@ class ApiClientTest(unittest.TestCase):
     @responses.activate
     def test_issue_request(self):
         items = {"items": [1, 2]}
-        params = {"k": "v"}
-        request = Request().update_url("fake_url").update_params({"k":"v"})\
+        request = Request().update_url("fake_url").update_params({"k": "v"})\
                            .update_verb(VERBS.GET)
         responses.add(responses.GET, "https://agilezen.com/api/v1/fake_url?k=v",
                       match_querystring=True, body=json.dumps(items),
