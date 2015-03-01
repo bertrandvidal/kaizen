@@ -131,6 +131,15 @@ class ProjectRequest(ApiRequest):
         """
         return PhaseRequest.from_project_request(self, phase_id)
 
+    def stories(self, story_id=None):
+        """Access the Stories resource as a sub-request of a Project.
+        If story_id is NOne the request will list all Stories in the Project.
+
+        Args:
+            story_id: id of the story, defaults to None
+        """
+        return StoryRequest.from_project_request(self, story_id)
+
     def members(self, user_id=None):
         """Return member(s) within a project.
         If user_id is None it will list members.
@@ -188,4 +197,26 @@ class PhaseRequest(ApiRequest):
         if limit is not None:
             self.update_data({"limit": limit})
         return self.update_verb(VERBS.POST)
+
+    def stories(self):
+        """Allows to access Stories in that Phase."""
+        return StoryRequest.from_phase_request(self)
+
+
+class StoryRequest(ApiRequest):
+    """Access the Story entry point"""
+
+    @classmethod
+    def _from_request(cls, request):
+        story_request = cls(request.get_api_key())
+        return request.copy(story_request).update_url("/stories")
+
+    @classmethod
+    def from_project_request(cls, project_request, story_id=None):
+        return cls._from_request(project_request)\
+                  .update_url("/%s" % _default_to_empty_str(story_id))
+
+    @classmethod
+    def from_phase_request(cls, phase_request):
+        return cls._from_request(phase_request)
 

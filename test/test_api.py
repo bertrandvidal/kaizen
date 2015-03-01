@@ -2,7 +2,8 @@ import unittest
 import json
 import responses
 
-from kaizen.api import ApiRequest, ProjectRequest, ZenRequest, PhaseRequest
+from kaizen.api import (ApiRequest, ProjectRequest, ZenRequest, PhaseRequest,
+                        StoryRequest)
 from kaizen.request import VERBS
 
 
@@ -141,6 +142,40 @@ class PhaseRequestTest(unittest.TestCase):
                        "https://agilezen.com/api/v1/projects/12/phases/",
                        content_type="application/json", status=200, body="{}")
         update_request.send()
+
+
+class StoryRequestTest(unittest.TestCase):
+
+    def test_from_project_request(self):
+        zen_request = ZenRequest("fake_key").update_url("/fake_url")\
+                                            .update_params({"k": "v"})\
+                                            .update_verb(VERBS.POST)\
+                                            .update_data({"x": "y"})
+        project_request = ProjectRequest.from_zen_request(zen_request,12)
+        story_request = StoryRequest.from_project_request(project_request)
+        self.assertEqual(story_request.get_api_key(),
+                         zen_request.get_api_key())
+        self.assertEqual(story_request.url, "/fake_url/projects/12/stories/")
+        self.assertEqual(story_request.verb, VERBS.POST)
+        self.assertEqual(story_request.params, {"k": "v"})
+        self.assertEqual(story_request.data, {"x": "y"})
+
+    def test_from_phase_request(self):
+        zen_request = ZenRequest("fake_key").update_url("/fake_url")\
+                                            .update_params({"k": "v"})\
+                                            .update_verb(VERBS.POST)\
+                                            .update_data({"x": "y"})
+        project_request = ProjectRequest.from_zen_request(zen_request,12)
+        phase_request = PhaseRequest.from_project_request(project_request, 12)
+        story_request = StoryRequest.from_phase_request(phase_request)
+        self.assertEqual(story_request.get_api_key(),
+                         zen_request.get_api_key())
+        self.assertEqual(story_request.url,
+                         "/fake_url/projects/12/phases/12/stories")
+        self.assertEqual(story_request.verb, VERBS.POST)
+        self.assertEqual(story_request.params, {"k": "v"})
+        self.assertEqual(story_request.data, {"x": "y"})
+
 
 
 if __name__ == "__main__":
