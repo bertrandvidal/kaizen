@@ -131,25 +131,6 @@ class ProjectRequest(ApiRequest):
         """
         return PhaseRequest.from_project_request(self, phase_id)
 
-    def add_phase(self, name, description, index=None, limit=None):
-        """Add a new Phase to a Project.
-
-        Args:
-            name: the name of the Phase as displayed on the board
-            description: the description of the Phase
-            index: zero based index into the list of phases, defaults to the
-            index before the Backlog
-            limit: work in progress limit for phase
-        """
-        self.update_verb(VERBS.POST)
-        phase_data = {"name": name, "description": description}
-        if index is not None:
-            phase_data.update({"index": index})
-        if limit is not None:
-            phase_data.update({"limit": limit})
-        self.update_data(phase_data)
-        return self.phases()
-
     def members(self, user_id=None):
         """Return member(s) within a project.
         If user_id is None it will list members.
@@ -177,4 +158,21 @@ class PhaseRequest(ApiRequest):
         request = project_request.copy(request)
         return request.update_url("/phases/%s" %
                                   _default_to_empty_str(phase_id))
+
+    def add(self, name, description, index=None, limit=None):
+        """Add a new Phase to a Project.
+
+        Args:
+            name: the name of the Phase as displayed on the board
+            description: the description of the Phase
+            index: zero based index into the list of phases. Backlog phase
+            must have index 0 and Archive must have the last index.
+            limit: work in progress limit for phase
+        """
+        self.update_data({"name": name, "description": description})
+        if index is not None:
+            self.update_data({"index": index})
+        if limit is not None:
+            self.update_data({"limit": limit})
+        return self.update_verb(VERBS.POST)
 

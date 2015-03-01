@@ -124,6 +124,15 @@ class PhaseRequestTest(unittest.TestCase):
                       content_type="application/json", status=200, body="{}")
         phase_request.send()
 
+    @responses.activate
+    def test_add_phase(self):
+        phase_request = ZenRequest("fake_key").projects(12).phases()
+        add_request = phase_request.add("name", "description", 1, 12)
+        responses.add(responses.POST,
+                       "https://agilezen.com/api/v1/projects/12/phases/",
+                       content_type="application/json", status=200, body="{}")
+        add_request.send()
+
 
 if __name__ == "__main__":
     unittest.main()
