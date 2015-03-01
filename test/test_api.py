@@ -130,8 +130,8 @@ class PhaseRequestTest(unittest.TestCase):
         phase_request = ZenRequest("fake_key").projects(12).phases()
         add_request = phase_request.add("name", "description", 1, 12)
         responses.add(responses.POST,
-                       "https://agilezen.com/api/v1/projects/12/phases/",
-                       content_type="application/json", status=200, body="{}")
+                      "https://agilezen.com/api/v1/projects/12/phases/",
+                      content_type="application/json", status=200, body="{}")
         add_request.send()
 
     @responses.activate
@@ -139,8 +139,8 @@ class PhaseRequestTest(unittest.TestCase):
         phase_request = ZenRequest("fake_key").projects(12).phases()
         update_request = phase_request.update("name", "description", 1, 12)
         responses.add(responses.PUT,
-                       "https://agilezen.com/api/v1/projects/12/phases/",
-                       content_type="application/json", status=200, body="{}")
+                      "https://agilezen.com/api/v1/projects/12/phases/",
+                      content_type="application/json", status=200, body="{}")
         update_request.send()
 
 
@@ -151,7 +151,7 @@ class StoryRequestTest(unittest.TestCase):
                                             .update_params({"k": "v"})\
                                             .update_verb(VERBS.POST)\
                                             .update_data({"x": "y"})
-        project_request = ProjectRequest.from_zen_request(zen_request,12)
+        project_request = ProjectRequest.from_zen_request(zen_request, 12)
         story_request = StoryRequest.from_project_request(project_request)
         self.assertEqual(story_request.get_api_key(),
                          zen_request.get_api_key())
@@ -165,7 +165,7 @@ class StoryRequestTest(unittest.TestCase):
                                             .update_params({"k": "v"})\
                                             .update_verb(VERBS.POST)\
                                             .update_data({"x": "y"})
-        project_request = ProjectRequest.from_zen_request(zen_request,12)
+        project_request = ProjectRequest.from_zen_request(zen_request, 12)
         phase_request = PhaseRequest.from_project_request(project_request, 12)
         story_request = StoryRequest.from_phase_request(phase_request)
         self.assertEqual(story_request.get_api_key(),
@@ -175,7 +175,6 @@ class StoryRequestTest(unittest.TestCase):
         self.assertEqual(story_request.verb, VERBS.POST)
         self.assertEqual(story_request.params, {"k": "v"})
         self.assertEqual(story_request.data, {"x": "y"})
-
 
 
 if __name__ == "__main__":
