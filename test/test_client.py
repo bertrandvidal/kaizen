@@ -25,7 +25,7 @@ class ApiClientTest(unittest.TestCase):
         responses.add(responses.GET, "https://agilezen.com/api/v1/fake_url?k=v",
                       match_querystring=True, body=json.dumps(items),
                       status=200, content_type="application/json")
-        self.assertEquals(self._client.send_request(request),
+        self.assertEqual(self._client.send_request(request),
                           items)
 
     @responses.activate

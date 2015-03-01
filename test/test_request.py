@@ -45,9 +45,9 @@ class RequestTest(unittest.TestCase):
     def test_call_chaining(self):
         post_request = self._request.update_verb("POST").update_url("/call_me")\
             .update_params({"name": "popo"}).update_data({"text": "cool beans"})
-        self.assertEquals(post_request, self._request)
-        self.assertEquals(post_request.verb, "POST")
-        self.assertEquals(post_request.url, "/call_me")
+        self.assertEqual(post_request, self._request)
+        self.assertEqual(post_request.verb, "POST")
+        self.assertEqual(post_request.url, "/call_me")
         self.assertDictEqual(post_request.params, {"name": "popo"})
         self.assertDictEqual(post_request.data, {"text": "cool beans"})
 
