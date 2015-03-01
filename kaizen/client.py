@@ -56,8 +56,7 @@ class ApiClient(object):
         Args:
             resource_path: path to the resource from the API root
         """
-        if not resource_path.startswith("/"):
-            resource_path = "/%s" % resource_path
+        resource_path = "/%s" % resource_path.lstrip("/")
         return "%s%s" % (self.__class__.API_URL, resource_path)
 
     def _get_headers(self, headers):
