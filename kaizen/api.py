@@ -2,7 +2,7 @@ from kaizen.client import ApiClient
 from kaizen.request import Verbs, Request
 
 
-def _default(arg):
+def _default_to_empty_str(arg):
     """Return the empty string if the arg is None"""
     return arg if arg is not None else ""
 
@@ -89,7 +89,8 @@ class ProjectRequest(ApiRequest):
     def from_zen_request(cls, zen_request, project_id=None):
         request = cls(zen_request.get_api_key())
         request = zen_request.copy(request)
-        return request.update_url("/projects/%s" % _default(project_id))
+        return request.update_url("/projects/%s" %
+                                  _default_to_empty_str(project_id))
 
     def phases(self, phase_id=None):
         """Access the Phases resource as a sub-resource of a Project.
@@ -99,7 +100,7 @@ class ProjectRequest(ApiRequest):
         Args:
             phase_id: id of a specific Phase, defaults to None
         """
-        return self.update_url("/phases/%s" % _default(phase_id))
+        return self.update_url("/phases/%s" % _default_to_empty_str(phase_id))
 
     def add_phase(self, name, description, index=None, limit=None):
         """Add a new Phase to a Project.
@@ -127,5 +128,5 @@ class ProjectRequest(ApiRequest):
         Args:
             user_id: the id of the user you want details from
         """
-        return self.update_url("/members/%s" % _default(user_id))
+        return self.update_url("/members/%s" % _default_to_empty_str(user_id))
 
