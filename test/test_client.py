@@ -26,7 +26,7 @@ class ApiClientTest(unittest.TestCase):
                       match_querystring=True, body=json.dumps(items),
                       status=200, content_type="application/json")
         self.assertEqual(self._client.send_request(request),
-                          items)
+                         items)
 
     @responses.activate
     def test_request_raises(self):
