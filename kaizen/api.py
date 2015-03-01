@@ -1,5 +1,5 @@
 from kaizen.client import ApiClient
-from kaizen.request import Verbs, Request
+from kaizen.request import VERBS, Request
 
 
 def _default_to_empty_str(arg):
@@ -92,6 +92,28 @@ class ProjectRequest(ApiRequest):
         return request.update_url("/projects/%s" %
                                   _default_to_empty_str(project_id))
 
+    def update(self, name=None, description=None, details=None, owner=None):
+        """Update a Project witht the given arguments.
+
+        Args:
+            name: name of the project
+            description: a short description of the project
+            details: a markdown-formatted free-from description of the project
+            owner: owner of the project
+
+        Note:
+            for the owner see: http://dev.agilezen.com/resources/users.html
+        """
+        if name is not None:
+            self.update_data({"name": name})
+        if description is not None:
+            self.update_data({"description": description})
+        if details is not None:
+            self.update_data({"details": details})
+        if owner is not None:
+            self.data.update({"owner": owner})
+        return self.update_verb(VERBS.PUT)
+
     def phases(self, phase_id=None):
         """Access the Phases resource as a sub-resource of a Project.
         If phase_id is None the request will list all Phases you have access
@@ -112,7 +134,7 @@ class ProjectRequest(ApiRequest):
             index before the Backlog
             limit: work in progress limit for phase
         """
-        self.update_verb(Verbs.POST)
+        self.update_verb(VERBS.POST)
         phase_data = {"name": name, "description": description}
         if index is not None:
             phase_data.update({"index": index})

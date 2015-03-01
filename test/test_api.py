@@ -86,6 +86,19 @@ class ProjectRequestTest(unittest.TestCase):
         self.assertEqual(project_request.params, {"k": "v"})
         self.assertEqual(project_request.data, {"x": "y"})
 
+    @responses.activate
+    def test_update_project(self):
+        body = {"name": "name", "description": "description",
+                "details": "details", "owner": 1}
+        project = ZenRequest("fake_key").projects(12).update("name",
+                                                             "description",
+                                                             "details", 1)
+        responses.add(responses.PUT,
+                      "https://agilezen.com/api/v1/projects/12",
+                      content_type="application/json", status=200,
+                      body=json.dumps(body))
+        project.send()
+
 
 if __name__ == "__main__":
     unittest.main()
