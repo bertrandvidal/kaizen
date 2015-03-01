@@ -22,6 +22,19 @@ class RequestTest(unittest.TestCase):
     def setUp(self):
         self._request = Request()
 
+    def test_copy_raises_on_invalid_object(self):
+        self.assertRaises(ValueError, Request().copy, object())
+
+    def test_copy_set_attributes(self):
+        request = self._request.update_verb("POST").update_url("/call_me")\
+                                .update_params({"name": "popo"})\
+                                .update_data({"text": "cool beans"})
+        dest = request.copy(Request())
+        self.assertEqual(request.url, dest.url)
+        self.assertEqual(request.verb, dest.verb)
+        self.assertEqual(request.params, dest.params)
+        self.assertEqual(request.data, dest.data)
+
     def test_set_verb(self):
         def assign_verb(new_verb):
             """To make it possible to use assertRaises."""

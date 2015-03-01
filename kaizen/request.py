@@ -48,6 +48,23 @@ class Request(object):
         self._params = {}
         self._data = {}
 
+    def copy(self, dest):
+        """Copy all Request attribute to dest.
+
+        Args:
+            dest: a sub-class of Request
+
+        Raises:
+            ValueError if dest is not a sub-class of Request
+
+        Returns:
+            dest with its attribute equal to those of self
+        """
+        if not isinstance(dest, Request):
+            raise ValueError("'%s' should be a sub-class of 'Request'" % dest)
+        return dest.update_url(self.url).update_verb(self.verb)\
+                   .update_params(self.params).update_data(self.data)
+
     @property
     def url(self):
         """Alias private attribute url."""
