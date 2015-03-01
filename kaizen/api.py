@@ -34,8 +34,7 @@ class ZenRequest(Request):
         Raises:
             requests.exceptions.HTTPError if the request is not successful
         """
-        return self._client.make_request(self.verb, self.url, self.params,
-                                         self.data)
+        return self._client.send_request(self)
 
     def paginate(self, page, size=100):
         """Paginate results from the api.

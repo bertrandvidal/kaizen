@@ -25,25 +25,24 @@ class ApiClient(object):
         """
         self._api_key = api_key
 
-    def make_request(self, verb, url, params=None, data=None, headers=None):
-        """Send a HTTP request to the given url along with params, data and
-        headers.
+    def send_request(self, request, headers=None):
+        """Send a HTTP request, from which url, verb, params and data are taken
 
         Args:
-            verb: HTTP verb to use
-            url: path to the resource to send the request to
-            params: url parameters to send
-            data: paylaod to send
+            request: the request to send
             headers: headers to send
+
         Returns:
             the dict loaded from the json response
+
         Raises:
             a requests.HTTPError if the status code is not OK
         """
-        url = self._get_url(url)
+        url = self._get_url(request.url)
         headers = default_dict(headers)
-        data = json.dumps(default_dict(data))
-        response = requests.request(verb, url, params=default_dict(params),
+        data = json.dumps(default_dict(request.data))
+        params = default_dict(request.params)
+        response = requests.request(request.verb, url, params=params,
                                     data=data,
                                     headers=self._get_headers(headers))
         response.raise_for_status()
