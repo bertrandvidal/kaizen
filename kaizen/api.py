@@ -216,8 +216,9 @@ class StoryRequest(ApiRequest):
     def from_phase_request(cls, phase_request):
         return cls._from_request(phase_request)
 
-    def update(self, text=None, phase_id=None, owner=None, color=None, details=None,
-            size=None, priority=None, status=None, blocked_reason=None):
+    def update(self, text=None, phase_id=None, owner=None, color=None,
+               details=None, size=None, priority=None, status=None,
+               blocked_reason=None):
         """Update a Story properties, you only need to specify the properties
         you want to change.
 
