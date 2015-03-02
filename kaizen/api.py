@@ -263,3 +263,15 @@ class StoryRequest(ApiRequest):
                                        "tags": tags, "tasks": tasks})
         return self.update_data(data).update_verb(VERBS.POST)
 
+    def tags(self):
+        """Access the tags of the Story."""
+        return self.update_verb(VERBS.GET).update_url("/tags")
+
+    def add_tag(self, tag_name):
+        """Add a Tag in the Story
+
+        Args:
+            tag_name: name of the tag to add
+        """
+        return self.update_verb(VERBS.POST).update_data({"name": name})
+
