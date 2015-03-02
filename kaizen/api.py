@@ -216,6 +216,30 @@ class StoryRequest(ApiRequest):
     def from_phase_request(cls, phase_request):
         return cls._from_request(phase_request)
 
+    def update(self, text=None, phase_id=None, owner=None, color=None, details=None,
+            size=None, priority=None, status=None, blocked_reason=None):
+        """Update a Story properties, you only need to specify the properties
+        you want to change.
+
+        Args:
+            text: the text of the story, displayed on the card
+            phase_id: the id of the phase in which to create the story,
+            defaults to the Backlog
+            owner: the id or username of the user who will be assigned the
+            story, not assigned by default
+            color: defaults to grey, see AgileZen doc for available colors
+            details: the details of the story in Markdown format
+            size: the story's size
+            priority: the story's priority
+            status: Valid values for stories on board: started, ready, blocked
+            blocked_reason: the reason the story is blocked, if its status is
+            set to 'blocked'
+        """
+        self.add(text, phase_id, owner, color, details, size, priority)
+        data = _remove_none_from_dict({"status": status,
+                                       "blockedReason": blocked_reason})
+        return self.update_data(data).update_verb(VERBS.PUT)
+
     def add(self, text, phase_id=None, owner=None, color=None, details=None,
             size=None, priority=None, tags=None, tasks=None):
         """Add a Story to a Phase.

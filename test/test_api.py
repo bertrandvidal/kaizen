@@ -189,6 +189,14 @@ class StoryRequestTest(unittest.TestCase):
                       content_type="application/json", status=200, body="{}")
         story_request.add("New story", details="More on that later")
 
+    @responses.activate
+    def test_update_request(self):
+        story_request = ZenRequest("fake_key").projects(12).stories()
+        responses.add(responses.PUT,
+                      "https://agilezen.com/api/v1/projects/12/stories/",
+                      content_type="application/json", status=200, body="{}")
+        story_request.update(status="blocked", blocked_reason="Why not")
+
 
 if __name__ == "__main__":
     unittest.main()
