@@ -260,7 +260,8 @@ class StoryRequest(ApiRequest):
         data = _remove_none_from_dict({"text": text, "phase": phase_id,
                                        "owner": owner, "color": color,
                                        "details": details, "size": size,
-                                       "tags": tags, "tasks": tasks})
+                                       "tags": tags, "tasks": tasks,
+                                       "priority": priority})
         return self.update_data(data).update_verb(VERBS.POST)
 
     def tags(self):
