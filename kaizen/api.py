@@ -195,26 +195,19 @@ class PhaseRequest(ApiRequest):
         return self.update_data(data).update_verb(VERBS.POST)
 
     def stories(self):
-        """Allows to access Stories in that Phase."""
-        return StoryRequest.from_phase_request(self)
+        """Allows to list Stories in that Phase."""
+        return self.update_url("/stories").update_verb(VERBS.GET)
 
 
 class StoryRequest(ApiRequest):
     """Access the Story entry point"""
 
     @classmethod
-    def _from_request(cls, request):
-        story_request = cls(request.get_api_key())
-        return request.copy(story_request).update_url("/stories")
-
-    @classmethod
     def from_project_request(cls, project_request, story_id=None):
-        return cls._from_request(project_request)\
-                  .update_url("/%s" % _default_to_empty_str(story_id))
-
-    @classmethod
-    def from_phase_request(cls, phase_request):
-        return cls._from_request(phase_request)
+        story_request = cls(project_request.get_api_key())
+        story_request = project_request.copy(story_request)
+        return story_request.update_url("/stories/%s"
+                                          % _default_to_empty_str(story_id))
 
     def update(self, text=None, phase_id=None, owner=None, color=None,
                details=None, size=None, priority=None, status=None,
@@ -240,6 +233,15 @@ class StoryRequest(ApiRequest):
         data = _remove_none_from_dict({"status": status,
                                        "blockedReason": blocked_reason})
         return self.update_data(data).update_verb(VERBS.PUT)
+
+    def move_to_phase(self, phase_id, owner=None):
+        """Move the Story to a Phase, it can be assigned to a User.
+
+        Args:
+            phase_id: id of the phase to which the Story will be moved to
+            owner: User to which the Story will be assigned
+        """
+        return self.update(phase_id=phase_id, owner=owner)
 
     def add(self, text, phase_id=None, owner=None, color=None, details=None,
             size=None, priority=None, tags=None, tasks=None):
