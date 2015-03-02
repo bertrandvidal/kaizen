@@ -273,5 +273,5 @@ class StoryRequest(ApiRequest):
         Args:
             tag_name: name of the tag to add
         """
-        return self.update_verb(VERBS.POST).update_data({"name": name})
+        return self.update_verb(VERBS.POST).update_data({"name": tag_name})
 
