@@ -7,6 +7,11 @@ def _default_to_empty_str(arg):
     return arg if arg is not None else ""
 
 
+def _remove_none_from_dict(data):
+    """Remove keys with a None value in the given data."""
+    return {(k,v) for (k,v) in data.items() if v is not None}
+
+
 class ApiRequest(Request):
     """The base Request object containing common methods."""
 
@@ -111,15 +116,9 @@ class ProjectRequest(ApiRequest):
         Note:
             for the owner see: http://dev.agilezen.com/resources/users.html
         """
-        if name is not None:
-            self.update_data({"name": name})
-        if description is not None:
-            self.update_data({"description": description})
-        if details is not None:
-            self.update_data({"details": details})
-        if owner is not None:
-            self.data.update({"owner": owner})
-        return self.update_verb(VERBS.PUT)
+        data = _remove_none_from_dict({"name": name, "description": description,
+                                       "details": details, "owner": owner})
+        return self.update_data(data).update_verb(VERBS.PUT)
 
     def phases(self, phase_id=None):
         """Access the Phases resource as a sub-request of a Project.
@@ -191,12 +190,9 @@ class PhaseRequest(ApiRequest):
             must have index 0 and Archive must have the last index.
             limit: work in progress limit for phase
         """
-        self.update_data({"name": name, "description": description})
-        if index is not None:
-            self.update_data({"index": index})
-        if limit is not None:
-            self.update_data({"limit": limit})
-        return self.update_verb(VERBS.POST)
+        data = _remove_none_from_dict({"name": name, "description": description,
+                                       "index": index, "limit": limit})
+        return self.update_data(data).update_verb(VERBS.POST)
 
     def stories(self):
         """Allows to access Stories in that Phase."""
