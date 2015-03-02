@@ -9,7 +9,7 @@ def _default_to_empty_str(arg):
 
 def _remove_none_from_dict(data):
     """Remove keys with a None value in the given data."""
-    return {(k,v) for (k,v) in data.items() if v is not None}
+    return {(k, v) for (k, v) in data.items() if v is not None}
 
 
 class ApiRequest(Request):
