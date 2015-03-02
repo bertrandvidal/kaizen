@@ -216,3 +216,26 @@ class StoryRequest(ApiRequest):
     def from_phase_request(cls, phase_request):
         return cls._from_request(phase_request)
 
+    def add(self, text, phase_id=None, owner=None, color=None, details=None,
+            size=None, priority=None, tags=None, tasks=None):
+        """Add a Story to a Phase.
+
+        Args:
+            text: the text of the story, displayed on the card
+            phase_id: the id of the phase in which to create the story,
+            defaults to the Backlog
+            owner: the id or username of the user who will be assigned the
+            story, not assigned by default
+            color: defaults to grey, see AgileZen doc for available colors
+            details: the details of the story in Markdown format
+            size: the story's size
+            priority: the story's priority
+            tags: an array of tag ids or names to apply to the story
+            tasks: an array of task objects to add to the story
+        """
+        data = _remove_none_from_dict({"text": text, "phase": phase_id,
+                                       "owner": owner, "color": color,
+                                       "details": details, "size": size,
+                                       "tags": tags, "tasks": tasks})
+        return self.update_data(data).update_verb(VERBS.POST)
+
