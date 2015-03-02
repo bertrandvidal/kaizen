@@ -30,5 +30,6 @@ setup(
     ],
     install_requires=[
         "requests",
+        "parse_this"
     ],
 )
