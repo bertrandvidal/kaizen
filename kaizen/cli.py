@@ -88,9 +88,13 @@ class ZenApi(object):
     def _get_next_phase_id(self, phase_name, project_id):
         # We can assume we won't need to paginate and go over more than 100 Phases
         phases = self.list_phases(project_id)["items"]
+        if phases[-1]["name"] == phase_name:
+            raise ValueError("Story is already in the last phase '%s'"
+                             % phase_name)
         for (idx, phase) in enumerate(phases):
             if phase["name"] == phase_name:
                 return phases[idx + 1]["id"]
+        raise ValueError("Unknown phase '%s'" % phase_name)
 
     @create_parser(Self, int, int, name="bump-phase")
     def move_story_to_next_phase(self, project_id, story_id):
@@ -103,7 +107,10 @@ class ZenApi(object):
         request = self._zen_request.projects(project_id)
         story_request = request.stories(story_id)
         story = story_request.send()
-        phase_id = self._get_next_phase_id(story["phase"]["name"], project_id)
+        try:
+            phase_id = self._get_next_phase_id(story["name"]["name"], project_id)
+        except ValueError as error:
+            return error.message
         return story_request.update(phase_id=phase_id).send()
 
 
