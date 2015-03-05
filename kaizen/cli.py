@@ -113,6 +113,16 @@ class ZenApi(object):
             return error.message
         return story_request.update(phase_id=phase_id).send()
 
+    # TODO: Possible methods to implement include:
+    #  - pop_next: pop the top Story of the "todo" phase and move it to
+    #    "working" assigning it to the user
+    #  - stats: list # of Story per user - also grouped by status/phase
+    #  - todo: list Story in the "todo" phase
+    #  - done: move Story to the "done" phase
+    # For those methods the concept of configuration should be introduced. It
+    # would contain: the username, name of the "todo" and "working" phases,
+    # api key, etc...
+
 
 if __name__ == "__main__":
     pprint(ZenApi.parser.call())
