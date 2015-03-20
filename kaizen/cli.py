@@ -1,6 +1,7 @@
 from kaizen.api import ZenRequest
 from parse_this import parse_class, create_parser, Self
 from pprint import pprint
+import os
 import yaml
 
 
@@ -19,12 +20,15 @@ class ZenApi(object):
     """Simplify access to the AgileZen API."""
 
     @create_parser(Self, str)
-    def __init__(self, api_key):
+    def __init__(self, config_path=None):
         """
         Args:
-            api_key: the API key given by AgileZen
+            config_path: full path to the config file, by default
+            '~/.kaizen.yaml' is used
         """
-        self._zen_request = ZenRequest(api_key)
+        config_path = config_path or os.path.expanduser("~/.kaizen.yaml")
+        self._config = get_config(config_path)
+        self._zen_request = ZenRequest(self._config["api_key"])
 
     @create_parser(Self)
     def list_projects(self, phases=False, members=False, metrics=False):

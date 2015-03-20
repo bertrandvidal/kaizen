@@ -5,11 +5,15 @@ import responses
 import unittest
 
 
+CONFIG_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                           "config_test.yaml")
+
+
 class ZenApiTest(unittest.TestCase):
 
     @responses.activate
     def test_get_next_phase_id(self):
-        api = ZenApi("fake_key")
+        api = ZenApi(CONFIG_PATH)
         phases = {"items": [{"id": 1, "name": "phase_name"},
                             {"id": 42, "name": "other_phase"}]}
         responses.add(responses.GET,
@@ -20,7 +24,7 @@ class ZenApiTest(unittest.TestCase):
 
     @responses.activate
     def test_get_next_phase_id_unknow_phase(self):
-        api = ZenApi("fake_key")
+        api = ZenApi(CONFIG_PATH)
         phases = {"items": [{"id": 1, "name": "phase_name"},
                             {"id": 42, "name": "other_phase"}]}
         responses.add(responses.GET,
@@ -31,7 +35,7 @@ class ZenApiTest(unittest.TestCase):
 
     @responses.activate
     def test_get_next_phase_id_story_in_last_phase(self):
-        api = ZenApi("fake_key")
+        api = ZenApi(CONFIG_PATH)
         phases = {"items": [{"id": 1, "name": "phase_name"},
                             {"id": 42, "name": "other_phase"}]}
         responses.add(responses.GET,
@@ -44,12 +48,9 @@ class ZenApiTest(unittest.TestCase):
 class ConfigTest(unittest.TestCase):
 
     def test_get_config_loads_yaml(self):
-        config_path = os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                                   "config_test.yaml")
-        config = get_config(config_path)
-        self.assertEqual(config, {'api_key': 'api_key',
-                                  'done_phase': 'Archive',
-                                  'project_id': 12,
-                                  'todo_phase': 'Ready',
-                                  'user_name': 'username',
-                                  'working_phase': 'Working'})
+        self.assertEqual(get_config(CONFIG_PATH), {'api_key': 'api_key',
+                                                   'done_phase': 'Archive',
+                                                   'project_id': 12,
+                                                   'todo_phase': 'Ready',
+                                                   'user_name': 'username',
+                                                   'working_phase': 'Working'})
