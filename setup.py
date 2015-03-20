@@ -32,4 +32,12 @@ setup(
         "requests",
         "parse_this"
     ],
+    entry_points={
+        # Console script entry points will result in commandline
+        # calling specified python callable. If your package include
+        # command line tools, add them here:
+        'console_scripts': [
+            'kaizen = kaizen.cli:run_cli',
+            ],
+    },
 )

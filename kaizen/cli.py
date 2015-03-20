@@ -124,5 +124,9 @@ class ZenApi(object):
     # api key, etc...
 
 
-if __name__ == "__main__":
+def run_cli():
     pprint(ZenApi.parser.call())
+
+
+if __name__ == "__main__":
+    run_cli()
