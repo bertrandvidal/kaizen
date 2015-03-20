@@ -1,6 +1,17 @@
 from kaizen.api import ZenRequest
 from parse_this import parse_class, create_parser, Self
 from pprint import pprint
+import yaml
+
+
+def get_config(config_path):
+    """Returns the configuration dict.
+
+    Args:
+        config_path: full path to the yaml config file
+    """
+    with open(config_path, "r") as config_file:
+        return yaml.load(config_file)
 
 
 @parse_class()

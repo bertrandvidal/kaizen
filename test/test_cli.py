@@ -1,5 +1,6 @@
-from kaizen.cli import ZenApi
+from kaizen.cli import ZenApi, get_config
 import json
+import os
 import responses
 import unittest
 
@@ -39,3 +40,16 @@ class ZenApiTest(unittest.TestCase):
                       body=json.dumps(phases), match_querystring=True)
         self.assertRaises(ValueError, api._get_next_phase_id, "other_phase", 12)
 
+
+class ConfigTest(unittest.TestCase):
+
+    def test_get_config_loads_yaml(self):
+        config_path = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                   "config_test.yaml")
+        config = get_config(config_path)
+        self.assertEqual(config, {'api_key': 'api_key',
+                                  'done_phase': 'Archive',
+                                  'project_id': 12,
+                                  'todo_phase': 'Ready',
+                                  'user_name': 'username',
+                                  'working_phase': 'Working'})

@@ -1,0 +1,6 @@
+api_key: "api_key"
+user_name: "username"
+project_id: 12
+todo_phase: "Ready"
+working_phase: "Working"
+done_phase: "Archive"
