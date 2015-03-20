@@ -1,10 +1,6 @@
 from kaizen.api import ZenRequest
 from parse_this import parse_class, create_parser, Self
 from pprint import pprint
-import logging
-
-
-logging.basicConfig(level=logging.DEBUG)
 
 
 @parse_class()
