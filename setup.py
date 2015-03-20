@@ -30,7 +30,8 @@ setup(
     ],
     install_requires=[
         "requests",
-        "parse_this"
+        "parse_this",
+        "pyyaml"
     ],
     entry_points={
         # Console script entry points will result in commandline
