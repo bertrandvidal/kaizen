@@ -60,7 +60,7 @@ class ZenApi(object):
         return request.send()
 
     @create_parser(Self, int, bool, bool, int, int)
-    def list_stories(self, project_id, tasks=False, tags=False, page=1,
+    def list_stories(self, project_id=None, tasks=False, tags=False, page=1,
                      size=100):
         """List stories in the Project specified by the given id.
 
@@ -71,6 +71,7 @@ class ZenApi(object):
             page: page number to display, defaults to the first page
             size: max number of stories to return, defaults to 100
         """
+        project_id = project_id or self._config["project_id"]
         request = self._zen_request.projects(project_id).stories()
         enrichments = [name for name, value in
                        [("tasks", tasks), ("tags", tags)] if value]
@@ -79,7 +80,7 @@ class ZenApi(object):
         return request.paginate(page, size).send()
 
     @create_parser(Self, int)
-    def list_phases(self, project_id, stories=False, page=1, size=100):
+    def list_phases(self, project_id=None, stories=False, page=1, size=100):
         """List phases in the Project specified by the given id.
 
         Args:
@@ -88,22 +89,25 @@ class ZenApi(object):
             page: page number to display, defaults to the first page
             size: max number of stories to return, defaults to 100
         """
+        project_id = project_id or self._config["project_id"]
         request = self._zen_request.projects(project_id).phases()
         if stories:
             request = request.with_enrichments("stories")
         return request.paginate(page, size).send()
 
     @create_parser(Self, int, str, str, int, int)
-    def add_phase(self, project_id, name, description, index=None, limit=None):
+    def add_phase(self, name, description, project_id=None, index=None,
+                  limit=None):
         """Add a Phase to the Project specified by the given id.
 
         Args:
-            project_id: id of the Project to add the Phase to
             name: name of the newly created Phase
             description: description of the newly created Phase
+            project_id: id of the Project to add the Phase to
             index: the zero based index into the list of phases
             limit: Work in progress limit for phase
         """
+        project_id = project_id or self._config["project_id"]
         return self._zen_request.projects(project_id).phases()\
                    .add(name, description, index, limit).send()
 
@@ -119,18 +123,20 @@ class ZenApi(object):
         raise ValueError("Unknown phase '%s'" % phase_name)
 
     @create_parser(Self, int, int, name="bump-phase")
-    def move_story_to_next_phase(self, project_id, story_id):
+    def move_story_to_next_phase(self, story_id, project_id=None):
         """The Story will be moved to the next Phase.
 
         Args:
-            project_id: id of the Project
             story_id: id of the Story to move
+            project_id: id of the Project
         """
+        project_id = project_id or self._config["project_id"]
         request = self._zen_request.projects(project_id)
         story_request = request.stories(story_id)
         story = story_request.send()
         try:
-            phase_id = self._get_next_phase_id(story["name"]["name"], project_id)
+            phase_id = self._get_next_phase_id(story["name"]["name"],
+                                               project_id)
         except ValueError as error:
             return error.message
         return story_request.update(phase_id=phase_id).send()
