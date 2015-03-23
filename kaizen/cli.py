@@ -135,7 +135,7 @@ class ZenApi(object):
         story_request = request.stories(story_id)
         story = story_request.send()
         try:
-            phase_id = self._get_next_phase_id(story["name"]["name"],
+            phase_id = self._get_next_phase_id(story["phase"]["name"],
                                                project_id)
         except ValueError as error:
             return error.message
