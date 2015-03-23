@@ -1,4 +1,4 @@
-from kaizen.cli import ZenApi, get_config
+from kaizen.cli import ZenApi, get_config, KaizenConfigError
 import json
 import os
 import responses
@@ -54,3 +54,11 @@ class ConfigTest(unittest.TestCase):
                                                    'todo_phase': 'Ready',
                                                    'user_name': 'username',
                                                    'working_phase': 'Working'})
+
+    def test_get_config_raises_on_non_existent_file(self):
+        self.assertRaises(KaizenConfigError, get_config, "unknown")
+
+    def test_get_config_raises_on_non_yaml_file(self):
+        malformed_file = os.path.abspath(__file__)
+        self.assertRaises(KaizenConfigError, get_config, malformed_file)
+

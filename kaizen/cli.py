@@ -1,8 +1,13 @@
 from kaizen.api import ZenRequest
 from parse_this import parse_class, create_parser, Self
 from pprint import pprint
+from yaml.error import YAMLError
 import os
 import yaml
+
+
+class KaizenConfigError(Exception):
+    """Used when a configuration error occurs."""
 
 
 def get_config(config_path):
@@ -11,8 +16,14 @@ def get_config(config_path):
     Args:
         config_path: full path to the yaml config file
     """
-    with open(config_path, "r") as config_file:
-        return yaml.load(config_file)
+    try:
+        with open(config_path, "r") as config_file:
+            return yaml.load(config_file)
+    except IOError:
+        raise KaizenConfigError("'%s' does not exist." % config_path)
+    except YAMLError:
+        raise KaizenConfigError("'%s' is not a well formatted yaml file."
+                                % config_path)
 
 
 @parse_class()
