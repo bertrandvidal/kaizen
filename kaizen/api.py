@@ -207,7 +207,7 @@ class StoryRequest(ApiRequest):
         story_request = cls(project_request.get_api_key())
         story_request = project_request.copy(story_request)
         return story_request.update_url("/stories/%s"
-                                          % _default_to_empty_str(story_id))
+                                        % _default_to_empty_str(story_id))
 
     def update(self, text=None, phase_id=None, owner=None, color=None,
                details=None, size=None, priority=None, status=None,
