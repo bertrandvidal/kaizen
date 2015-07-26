@@ -27,7 +27,7 @@ setup(
     ],
     setup_requires=[
         "nose",
-        "mock==1.0.0",
+        "mock==1.0.1",
         "responses",
     ],
     install_requires=[
